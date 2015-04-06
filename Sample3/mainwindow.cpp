@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(on_pushButton_clicked()));
 }
 
 MainWindow::~MainWindow()
@@ -15,7 +16,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    QPushButton* btn = new QPushButton(this);
-    btn->setText("smth");
-    btn->setGeometry(5, 5, 100, 100);
+	ui->pushButton->setText("askdjhfalskdjhfalskjdh");
 }
