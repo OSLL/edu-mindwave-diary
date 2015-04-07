@@ -1,6 +1,8 @@
 #ifndef THINKGEAR_H
 #define THINKGEAR_H
 
+extern char* newVarName;
+
 /*
  * @(#)thinkgear.h    4.2    Sep 28, 2009
  *
@@ -840,7 +842,6 @@ Java_ThinkGear_FreeConnection( JNIEnv *, jclass, jint );
 
 #endif /* COMPILE_FOR_JNI */
 /* END FUNCTIONS FOR JNI SUPPORT */
-
 
 #ifdef __cplusplus
 }  /* extern "C" */
