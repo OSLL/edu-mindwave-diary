@@ -3,10 +3,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include "thinkgear.h"
 
 char* newVarName;
 
-void
+/**
+ * Prompts and waits for the user to press ENTER.
+ */
+static void
 wait() {
     printf( "\n" );
     printf( "Press the ENTER key...\n" );
@@ -31,13 +35,8 @@ int main(int argc, char *argv[])
     time_t currTime     = 0;
     char  *currTimeStr  = NULL;
 
+    /* Print driver version number */
     dllVersion = TG_GetDriverVersion();
-    printf( "ThinkGear DLL version: %d\n", dllVersion );
-
-    /* Get a connection ID handle to ThinkGear */
-
-
-
 
     MainWindow w;
     w.show();

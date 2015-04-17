@@ -13,9 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+#  thinkgear.cpp
 
 HEADERS  += mainwindow.h \
     thinkgear.h
 
 FORMS    += mainwindow.ui
+
+#INCLUDEPATH += "thinkgear.lib" \
+#                "thinkgear.dll"
+
+#LIBS += -lthinkgear
+win32:LIBS += thinkgear.lib
