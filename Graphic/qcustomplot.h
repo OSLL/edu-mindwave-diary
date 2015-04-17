@@ -45,15 +45,19 @@
 #include <QMargins>
 #include <qmath.h>
 #include <limits>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#  include <qnumeric.h>
-#  include <QPrinter>
-#  include <QPrintEngine>
-#else
-#  include <QtNumeric>
-#  include <Qt5PrintSupport>
-//#include <QPrint>
-#endif
+#include <QtGlobal>
+#include <QtNumeric>
+#include <QPrinter>
+#include <QPrintEngine>
+//#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+//#  include <qnumeric.h>
+//#  include <QPrinter>
+//#  include <QPrintEngine>
+//#else
+//#  include <QtNumeric>
+//#  include <Qt5PrintSupport>
+////#include <QPrint>
+//#endif
 
 class QCPPainter;
 class QCustomPlot;
