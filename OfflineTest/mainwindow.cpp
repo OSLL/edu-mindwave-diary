@@ -1,18 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QString>
-#include <QTime>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(on_pushButton_clicked()));
     connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(on_pushButton_2_clicked()));
     connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(on_pushButton_3_clicked()));
     connect(ui->pushButton_4,SIGNAL(clicked()),this,SLOT(on_pushButton_4_clicked()));
     timer = new QTimer;
+
     //Связываем сигнал переполнения таймера со слотом
     QObject::connect(timer,SIGNAL(timeout()), this, SLOT(timer_overflow()));
 }
