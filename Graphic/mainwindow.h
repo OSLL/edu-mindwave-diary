@@ -2,14 +2,17 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTime>
+#include <QTimer>
+#include <QString>
+#include <algorithm>
 #include <string>
 #include <iostream>
 #include <cmath>
-#include<QTime>
-#include<QTimer>
 
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -22,32 +25,80 @@ public:
     QTimer *timer;
 
 private slots:
-    void on_pushButton_clicked();
+    void on_buttonWrite_clicked();
 
-    void on_pushButton_2_clicked();
+    void on_buttonStart_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_buttonStop_clicked();
 
-    void on_pushButton_4_clicked();
+    void on_buttonExit_clicked();
 
-    void on_pushButton_5_clicked();
+    void on_buttonRefresh_clicked();
 
-    //Слот, который срабатывает при переполнении таймера
+    // Function for alarm
     void timer_overflow();
 
-    void on_pushButton_6_clicked();
+    void on_buttonRestart_clicked();
 
-    void on_pushButton_7_clicked();
+    void on_buttonAnswer_clicked();
 
 private:
     Ui::MainWindow *ui;
 
 };
-extern int Period, NoPeriod; //Прошедший период, и количество периодов.
-extern double TestVariable; //Переменная которая выбирается рандомно каждую цикл.
-extern double AverageValue; //Среднее значение.
-extern double XGlobal[101], YGlobal[101]; //Глабальный массив, в котором храняться значения
-extern int Num1, Num2, Num3, Num4; //Количество запусков при нажатой кнопки.
-extern double Av1, Av2, Av3, Av4; //Среднее значение при нажатой кнопки.
+
+struct PersonalData
+{
+    int NumSleep = 1, NumRun = 1, NumRead = 1, NumPlay = 1; // Number of data packets
+    double AvConcSleep = 0, AvConcRun = 0, AvConcRead = 0, AvConcPlay = 0; // Average value of concentration
+    double AvMedSleep = 0, AvMedRun = 0, AvMedRead = 0, AvMedPlay = 0; // Average value of meditation
+
+    double FracSleepConc ()
+    {
+        return (this->AvConcSleep / this->NumSleep);
+    }
+
+    double FracRunConc ()
+    {
+        return (this->AvConcRun / this->NumRun);
+    }
+
+    double FracReadConc ()
+    {
+        return (this->AvConcRead / this->NumRead);
+    }
+
+    double FracPlayConc ()
+    {
+        return (this->AvConcPlay / this->NumPlay);
+    }
+
+    double FracSleepMed ()
+    {
+        return (this->AvMedSleep / this->NumSleep);
+    }
+
+    double FracRunMed ()
+    {
+        return (this->AvMedRun / this->NumRun);
+    }
+
+    double FracReadMed ()
+    {
+        return (this->AvMedRead / this->NumRead);
+    }
+
+    double FracPlayMed ()
+    {
+        return (this->AvMedPlay / this->NumPlay);
+    }
+};
+
+extern PersonalData first;
+extern int Period, NoPeriod; // Past period, number of current period
+extern double TestVariable; // Random value for graphic
+extern double AverageValueConc, AverageValueMed; // Current average values
+extern double XMeditation[101], YMeditation[101]; // Global array for points in graphic
+extern double XConcentration[101], YConcentration[101]; // Global array for points in graphic
 
 #endif // MAINWINDOW_H

@@ -6,8 +6,9 @@
 #include <QtCore>
 #include <QtGui>
 
-namespace Ui {
-class Widget;
+namespace Ui
+{
+    class Widget;
 }
 
 class Widget : public QWidget
@@ -18,15 +19,9 @@ public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
 
-public slots:
-
-    // Функция, которая будет выполняться по таймеру.
-   // void myTimer();
-
 private:
     Ui::Widget *ui;
 
-    //Переменная таймера.
     QTimer *timer;
 };
 

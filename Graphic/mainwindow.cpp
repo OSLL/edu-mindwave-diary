@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "math.h"
-#include <QString>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,14 +7,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(on_pushButton_clicked()));
-    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(on_pushButton_2_clicked()));
-    connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(on_pushButton_3_clicked()));
-    connect(ui->pushButton_4,SIGNAL(clicked()),this,SLOT(on_pushButton_4_clicked()));
+    connect(ui->buttonWrite,SIGNAL(clicked()),this,SLOT(on_buttonWrite_clicked()));
+    connect(ui->buttonStart,SIGNAL(clicked()),this,SLOT(on_buttonStart_clicked()));
+    connect(ui->buttonStop,SIGNAL(clicked()),this,SLOT(on_buttonStop_clicked()));
+    connect(ui->buttonExit,SIGNAL(clicked()),this,SLOT(on_buttonExit_clicked()));
 
     timer = new QTimer;
 
-    //Связываем сигнал переполнения таймера со слотом
+    ui->labelPause->setText("");
+
+    // Slot will be refreshed, then alarm will ring
     QObject::connect(timer,SIGNAL(timeout()), this, SLOT(timer_overflow()));
 }
 
@@ -26,133 +26,151 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_buttonWrite_clicked()
 {
-    //Обновляем значение времени на форме
-    ui->label_3->setText(QTime::currentTime().toString());//Выводим текущее время.
-    ui->label->setText(QString::number((Period + 100*NoPeriod)));//Выводим количество произведенных считываний.
+    // Refresh timer
+    ui->label_3->setText(QTime::currentTime().toString()); // Show current time
+    ui->label->setText(QString::number((Period + 100*NoPeriod))); // Show number of data packets
 
-    const QString str = QString::number(1 + sin(TestVariable));//Имитируем поступивший сигнал.
+    const QString str = QString::number(1 + sin(TestVariable)); // Imitation data packet
     TestVariable += rand() % 100;
     ui->textBrowser->setText(str);
-    YGlobal[Period] = 1 + sin(TestVariable);
+    YConcentration[Period] = 1 + sin(TestVariable);
+    YMeditation[Period] = 1 + cos(TestVariable);
 
-    if(ui->radioButton->isChecked())//Разбираем Варианты, какая кнопка нажата, для исчисления среднего.
+    if (ui->radioButton->isChecked()) // Choose selected button to calculate new average value for chosen activity
     {
-        Num1++;
-        Av1 += 1 + sin(TestVariable);
+        first.NumSleep++;
+        first.AvConcSleep += 1 + sin(TestVariable);
+        first.AvMedSleep += 1 + cos(TestVariable);
         ui->label_4->setText("now you say that you're sleeping");
     }
 
-    if(ui->radioButton_2->isChecked())
+    if (ui->radioButton_2->isChecked())
     {
-        Num2++;
-        Av2 += 1 + sin(TestVariable);
+        first.NumRun++;
+        first.AvConcRun += 1 + sin(TestVariable);
+        first.AvMedRun += 1 + cos(TestVariable);
         ui->label_4->setText("now you say that you're running");
     }
-    if(ui->radioButton_3->isChecked())
+
+    if (ui->radioButton_3->isChecked())
     {
-        Num3++;
-        Av3 += 1 + sin(TestVariable);
+        first.NumRead++;
+        first.AvConcRead += 1 + sin(TestVariable);
+        first.AvMedRead += 1 + cos(TestVariable);
         ui->label_4->setText("now you say that you're reading");
     }
-    if(ui->radioButton_4->isChecked())
+
+    if (ui->radioButton_4->isChecked())
     {
-        Num4++;
-        Av4 += 1 + sin(TestVariable);
+        first.NumPlay++;
+        first.AvConcPlay += 1 + sin(TestVariable);
+        first.AvMedPlay += 1 + cos(TestVariable);
         ui->label_4->setText("now you say that you're playing");
     }
-    if(ui->radioButton_5->isChecked())
+
+    if (ui->radioButton_5->isChecked())
     {
         ui->label_4->setText("");
     }
 
-    if (Period >= 100)//Подсчет периода.
+    if (Period >= 100) // Changing period
         NoPeriod++;
     Period = (Period + 1) % 101;
 
-    if (Av1 != 0)
-        ui->label_5->setText(QString::number(Av1/Num1));
+    if (first.AvConcSleep != 0)
+        ui->label_5->setText(QString::number(first.FracSleepConc()));
 
-    if (Av2 != 0)
-        ui->label_6->setText(QString::number(Av2/Num2));
+    if (first.AvConcRun != 0)
+        ui->label_6->setText(QString::number(first.FracRunConc()));
 
-    if (Av3 != 0)
-        ui->label_7->setText(QString::number(Av3/Num3));
+    if (first.AvConcRead != 0)
+        ui->label_7->setText(QString::number(first.FracReadConc()));
 
-    if (Av4 != 0)
-        ui->label_8->setText(QString::number(Av4/Num4));
+    if (first.AvConcPlay != 0)
+        ui->label_8->setText(QString::number(first.FracPlayConc()));
+    if (first.AvMedSleep != 0)
+        ui->label_14->setText(QString::number(first.FracSleepMed()));
 
-    MainWindow::on_pushButton_5_clicked();//Вывод графика.
-    AverageValue += 1 + sin(TestVariable);//Подсчет среднего значения.
+    if (first.AvMedRun != 0)
+        ui->label_15->setText(QString::number(first.FracRunMed()));
+
+    if (first.AvMedRead != 0)
+        ui->label_16->setText(QString::number(first.FracReadMed()));
+
+    if (first.AvMedPlay != 0)
+        ui->label_17->setText(QString::number(first.FracPlayMed()));
+
+    MainWindow::on_buttonRefresh_clicked(); // Update graphic
+    AverageValueConc += 1 + sin(TestVariable); // Calculating of average value
+    AverageValueMed += 1 + cos(TestVariable); //
 
     ui->horizontalSlider->setRange(100, 1000);
-    ui->label_2->setText("");//Убераем надпись Pause.
-    ui->label->setStyleSheet("color: rgb(0, 0, 0)");//Переводим надпись с числом циклов в черный цвет.
+    ui->labelPause->setText("");
+    ui->label->setStyleSheet("color: rgb(0, 0, 0)");
 
     if (ui->checkBox->isChecked())
-        MainWindow::on_pushButton_7_clicked();
+        MainWindow::on_buttonAnswer_clicked();
 }
 
 void MainWindow::timer_overflow()
 {
-    MainWindow::on_pushButton_clicked();//Вывод графика.
+    MainWindow::on_buttonWrite_clicked(); // Update graphic
 
-    ui->horizontalSlider->setRange(100, 1000);//Обновление частоты запуска.
+    ui->horizontalSlider->setRange(100, 1000); // Refresh speed of displaying
     timer->start(ui->horizontalSlider->value());
-
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_buttonStart_clicked()
 {
-    // кнопка 'start'
-    // запускаем таймер с интервалом 500 мк/с или 1 сек
-    // он будет каждую секунду выполнять действия,
-    // которые прописанные в нашей функции
+    // Here the program upgrading automatically
     timer->start(ui->horizontalSlider->value());
-    ui->pushButton->setEnabled(false);
-    ui->pushButton_5->setEnabled(false);
+    ui->buttonWrite->setEnabled(false);
+    ui->buttonRefresh->setEnabled(false);
 }
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_buttonStop_clicked()
 {
-    // кнопка 'stop'
-    // останавливает таймер и, следовательно, выполнение нашей функции
-    QFont font = ui->label_2->font();
+    // Now you should upgrade program by yourself
+    QFont font = ui->labelPause->font();
     font.setPointSize(50);
-    ui->label_2->setFont(font);
-    ui->label_2->setText("Pause");//Пишем, что начилось пауза.
-    ui->label_2->setStyleSheet("color: rgb(250, 10, 10)");
-    ui->label->setStyleSheet("color: rgb(200, 0, 0)");//Переводим надпись с количеством циклов в красный цвет.
+    ui->labelPause->setFont(font);
+    ui->labelPause->setText("Pause");
+    ui->labelPause->setStyleSheet("color: rgb(250, 10, 10)");
+    ui->label->setStyleSheet("color: rgb(200, 0, 0)");
     timer->stop();
-    ui->pushButton->setEnabled(true);
-    ui->pushButton_5->setEnabled(true);
+    ui->buttonWrite->setEnabled(true);
+    ui->buttonRefresh->setEnabled(true);
 }
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::on_buttonExit_clicked()
 {
-    // кнопка 'exit'
-    // выход из программы
     close();
 }
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_buttonRefresh_clicked()
 {
-    //Graphic
-    QVector<double> x1(101), y1(101); // Задаем массив средних значений.
-    int a;//Позиция с которой будем рисовать всреднее значение.
+    // Upgrade graphic
+    QVector <double> x1(101), y1(101); // Задаем массив средних значений.
+    int a; //Позиция с которой будем рисовать всреднее значение.
     if (NoPeriod == 0)
     {
        a = Period;
     }
     else
         a = 100;
-
-    for (int i = 100 - a; i < 100; ++i)
+    for (int i = 0; i < 100 - a; ++i)
+    {
+      x1[i] = 2;
+      y1[i] = -1; // Рисуем там, где не видно.
+    }
+    for (int i = 100 - a; i < 101; ++i)
     {
       x1[i] = i/50.0 - 1;
-      y1[i] = AverageValue / (Period + 100*NoPeriod); // Рисуем только там, где уже были значения.
+      y1[i] = AverageValueConc / (Period + 100*NoPeriod); // Рисуем только там, где уже были значения.
     }
+
     //Рисуем график.
     ui->widget->addGraph();
     ui->widget->graph(0)->setData(x1, y1);
@@ -172,51 +190,88 @@ void MainWindow::on_pushButton_5_clicked()
     QVector<double> x2(101), y2(101); //Рисуем второй график. Со значениями.
     for (int i = 0; i < 101; ++i)
     {
-      x2[i] = XGlobal[i]; // Копируем значения глобального графика со сдвигом.
-      y2[i] = YGlobal[(i + Period) % 101];
+      x2[i] = XConcentration[i]; // Копируем значения глобального графика со сдвигом.
+      y2[i] = YConcentration[(i + Period) % 101];
     }
     ui->widget->addGraph();
     ui->widget->graph(1)->setData(x2, y2);
+
+    QVector<double> x3(101), y3(101); //Рисуем второй график. Со значениями.
+    for (int i = 0; i < 101; ++i)
+    {
+      x3[i] = XMeditation[i]; // Копируем значения глобального графика со сдвигом.
+      y3[i] = YMeditation[(i + Period) % 101];
+    }
+    ui->widget->addGraph();
+    pen.setColor(QColor(210, 10, 10));// Цвет контура столбца
+    ui->widget->graph(2)->setPen(pen);
+    ui->widget->graph(2)->setData(x3, y3);
+
+    QVector<double> x4(101), y4(101); // Задаем массив средних значений.
+    for (int i = 0; i < 100 - a; ++i)
+    {
+      x4[i] = 2;
+      y4[i] = -1; // Рисуем там, где не видно.
+    }
+    for (int i = 100 - a; i < 101; ++i)
+    {
+      x4[i] = i/50.0 - 1;
+      y4[i] = AverageValueMed / (Period + 100*NoPeriod); // Рисуем только там, где уже были значения.
+    }
+
+    //Рисуем график.
+    ui->widget->addGraph();
+    ui->widget->graph(3)->setData(x4, y4);
+
+
     ui->widget->replot();
 }
 
 
-void MainWindow::on_pushButton_6_clicked()
+void MainWindow::on_buttonRestart_clicked()
 {
-    AverageValue = 0;
+    AverageValueConc = 0;
+    AverageValueMed = 0;
     NoPeriod = 0;
     Period = 0;
     TestVariable = 0;
     for (int i=0; i<101; ++i)
     {
-      XGlobal[i] = i/50.0 - 1; // Задаем х, пусть он рассположен от -1 до 1.
-      YGlobal[i] = 0; // начальные значения у.
+      XConcentration[i] = i/50.0 - 1; // Задаем х, пусть он рассположен от -1 до 1.
+      YConcentration[i] = 0; // начальные значения у.
+    }
+    for (int i=0; i<101; ++i)
+    {
+      XMeditation[i] = i/50.0 - 1; // Задаем х, пусть он рассположен от -1 до 1.
+      YMeditation[i] = 0; // начальные значения у.
     }
     ui->label->setText("");
-    ui->label_2->setText("");
+    ui->labelPause->setText("");
     ui->label_3->setText("");
     ui->textBrowser->setText("");
-    MainWindow::on_pushButton_5_clicked();//Обновление.
+    MainWindow::on_buttonRefresh_clicked();//Обновление.
 }
 
-void MainWindow::on_pushButton_7_clicked()
+void MainWindow::on_buttonAnswer_clicked()
 {
-    double a = abs(AverageValue - Av1);
-    if (a > abs(AverageValue - Av2))
-            a = abs(AverageValue - Av2);
-    if (a > abs(AverageValue - Av3))
-            a = abs(AverageValue - Av3);
-    if (a > abs(AverageValue - Av4))
-            a = abs(AverageValue - Av4);
-    if (a == abs(AverageValue - Av1))
-        ui->label_9->setText("I think, your are sleeping");
+    double a = std::min(abs(AverageValueConc - first.AvConcSleep), abs(AverageValueConc - first.AvConcRun));
+    a = std::min(a, abs(AverageValueConc - first.AvConcRead));
+    a = std::min(a, abs(AverageValueConc - first.AvConcPlay));
 
-    if (a == abs(AverageValue - Av2))
-        ui->label_9->setText("I think, your are running");
+    double b = std::min(abs(AverageValueMed - first.AvMedSleep), abs(AverageValueMed - first.AvMedRun));
+    b = std::min(a, abs(AverageValueMed - first.AvMedRead));
+    b = std::min(a, abs(AverageValueMed - first.AvMedPlay));
 
-    if (a == abs(AverageValue - Av3))
-        ui->label_9->setText("I think, your are reading");
+    if (a == abs(AverageValueConc - first.AvConcSleep))
+        ui->label_9->setText("I think, you are sleeping");
 
-    if (a == abs(AverageValue - Av4))
-        ui->label_9->setText("I think, your are playing");
+    if (a == abs(AverageValueConc - first.AvConcRun))
+        ui->label_9->setText("I think, you are running");
+
+    if (a == abs(AverageValueConc - first.AvConcRead))
+        ui->label_9->setText("I think, you are reading");
+
+    if (a == abs(AverageValueConc - first.AvConcPlay))
+        ui->label_9->setText("I think, you are playing");
+
 }
