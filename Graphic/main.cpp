@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-#define NUMBER_OF_POINTS 101
-
 // Extern variables from mainwindow.h
 double TestVariable = 0, AverageValueConc = 0, AverageValueMed = 0;
 double XMeditation[101], YMeditation[101];

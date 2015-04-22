@@ -10,6 +10,8 @@
 #include <iostream>
 #include <cmath>
 
+#define NUMBER_OF_POINTS 101
+
 namespace Ui
 {
     class MainWindow;

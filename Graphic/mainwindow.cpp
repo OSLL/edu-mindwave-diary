@@ -152,74 +152,65 @@ void MainWindow::on_buttonExit_clicked()
 void MainWindow::on_buttonRefresh_clicked()
 {
     // Upgrade graphic
-    QVector <double> x1(101), y1(101); // Задаем массив средних значений.
-    int a; //Позиция с которой будем рисовать всреднее значение.
+    QVector <double> x1(2), y1(2); // Array for average concentration line
+    int a; // Position to set average value in OX
     if (NoPeriod == 0)
     {
        a = Period;
     }
     else
+    {
         a = 100;
-    for (int i = 0; i < 100 - a; ++i)
-    {
-      x1[i] = 2;
-      y1[i] = -1; // Рисуем там, где не видно.
     }
-    for (int i = 100 - a; i < 101; ++i)
-    {
-      x1[i] = i/50.0 - 1;
-      y1[i] = AverageValueConc / (Period + 100*NoPeriod); // Рисуем только там, где уже были значения.
-    }
+    x1[0] = 1 - a/50.0;
+    x1[1] = 1;
+    y1[0] = AverageValueConc / (Period + 100*NoPeriod);
+    y1[1] = y1[0];
 
-    //Рисуем график.
+    // Display graphic
     ui->widget->addGraph();
     ui->widget->graph(0)->setData(x1, y1);
 
     QPen pen;
-    pen.setColor(QColor(50, 50, 100));// Цвет контура столбца
+    pen.setColor(QColor(50, 50, 100));
     ui->widget->graph(0)->setPen(pen);
 
-    //Называем оси. Задаем масштаб координат.
+    // Here some operation to change graphic view
     ui->widget->xAxis->setLabel("time");
     ui->widget->yAxis->setLabel("value");
-    // set axes ranges, so we see all data:
+    // Set axes ranges, so we see all data
     ui->widget->xAxis->setRange(-1, 1);
     ui->widget->yAxis->setRange(0, 2);
     ui->widget->replot();
 
-    QVector<double> x2(101), y2(101); //Рисуем второй график. Со значениями.
+    QVector<double> x2(NUMBER_OF_POINTS), y2(NUMBER_OF_POINTS); // Points to concentrarion graphic
     for (int i = 0; i < 101; ++i)
     {
-      x2[i] = XConcentration[i]; // Копируем значения глобального графика со сдвигом.
+      x2[i] = XConcentration[i]; // We get our values from global array
       y2[i] = YConcentration[(i + Period) % 101];
     }
+
     ui->widget->addGraph();
     ui->widget->graph(1)->setData(x2, y2);
 
-    QVector<double> x3(101), y3(101); //Рисуем второй график. Со значениями.
+    QVector<double> x3(101), y3(101); // Points to meditation graphic
     for (int i = 0; i < 101; ++i)
     {
-      x3[i] = XMeditation[i]; // Копируем значения глобального графика со сдвигом.
+      x3[i] = XMeditation[i];
       y3[i] = YMeditation[(i + Period) % 101];
     }
     ui->widget->addGraph();
-    pen.setColor(QColor(210, 10, 10));// Цвет контура столбца
+    pen.setColor(QColor(210, 10, 10));
     ui->widget->graph(2)->setPen(pen);
     ui->widget->graph(2)->setData(x3, y3);
 
-    QVector<double> x4(101), y4(101); // Задаем массив средних значений.
-    for (int i = 0; i < 100 - a; ++i)
-    {
-      x4[i] = 2;
-      y4[i] = -1; // Рисуем там, где не видно.
-    }
-    for (int i = 100 - a; i < 101; ++i)
-    {
-      x4[i] = i/50.0 - 1;
-      y4[i] = AverageValueMed / (Period + 100*NoPeriod); // Рисуем только там, где уже были значения.
-    }
+    QVector<double> x4(2), y4(2); // Array for average meditation line
+    x4[0] = 1 - a/50.0;
+    x4[1] = 1;
+    y4[0] = AverageValueMed/ (Period + 100*NoPeriod);
+    y4[1] = y4[0];
 
-    //Рисуем график.
+    // Displaying graphic
     ui->widget->addGraph();
     ui->widget->graph(3)->setData(x4, y4);
 
@@ -235,21 +226,21 @@ void MainWindow::on_buttonRestart_clicked()
     NoPeriod = 0;
     Period = 0;
     TestVariable = 0;
-    for (int i=0; i<101; ++i)
+    for (int i = 0; i < NUMBER_OF_POINTS; ++i)
     {
-      XConcentration[i] = i/50.0 - 1; // Задаем х, пусть он рассположен от -1 до 1.
-      YConcentration[i] = 0; // начальные значения у.
+      XConcentration[i] = i/50.0 - 1; // Let X be in range from -1 to 1
+      YConcentration[i] = 0;
     }
-    for (int i=0; i<101; ++i)
+    for (int i = 0; i < NUMBER_OF_POINTS; ++i)
     {
-      XMeditation[i] = i/50.0 - 1; // Задаем х, пусть он рассположен от -1 до 1.
-      YMeditation[i] = 0; // начальные значения у.
+      XMeditation[i] = i/50.0 - 1; //
+      YMeditation[i] = 0;
     }
     ui->label->setText("");
     ui->labelPause->setText("");
     ui->label_3->setText("");
     ui->textBrowser->setText("");
-    MainWindow::on_buttonRefresh_clicked();//Обновление.
+    MainWindow::on_buttonRefresh_clicked(); // Refresh graphic
 }
 
 void MainWindow::on_buttonAnswer_clicked()
