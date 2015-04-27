@@ -35,8 +35,6 @@ void MainWindow::on_buttonWrite_clicked()
 
     int currConcentration = getConcentrationValue();
     int currMeditation = getMeditationValue();
-    currConcentration = getConcentrationValue();
-    currMeditation = getMeditationValue();
 
     const QString str = QString::number(currConcentration); // Imitation data packet
     ui->textBrowser->setText(str);
@@ -110,17 +108,6 @@ void MainWindow::on_buttonWrite_clicked()
 
     MainWindow::on_buttonRefresh_clicked(); // Update graphic
 
-    // Calculating of average values
-    if (NoPeriod > 0)
-    {
-        AverageValueConc += currConcentration - YConcentration[0];
-        AverageValueMed += currMeditation - YMeditation[0];
-    }
-    else
-    {
-
-    }
-
     ui->horizontalSlider->setRange(100, 1000);
     ui->labelPause->setText("");
     ui->label->setStyleSheet("color: rgb(0, 0, 0)");
@@ -167,15 +154,28 @@ void MainWindow::on_buttonExit_clicked()
 void MainWindow::on_buttonRefresh_clicked()
 {
     // Upgrade graphic
+
+    AverageValueConc = 0;
+    QVector<double> x2(NUMBER_OF_POINTS), y2(NUMBER_OF_POINTS); // Points to concentrarion graphic
+    for (int i = 0; i < NUMBER_OF_POINTS; ++i)
+    {
+      x2[i] = XConcentration[i]; // We get our values from global array
+      y2[i] = YConcentration[(i + Period) % NUMBER_OF_POINTS];
+      AverageValueConc += y2[i];
+    }
+
     QVector <double> x1(2), y1(2); // Array for average concentration line
-    int a; // Position to set average value in OX
     if (NoPeriod == 0)
-       a = Period;
+    {
+        x1[0] = 1 - Period / 50.0;
+        y1[0] = AverageValueConc / Period;
+    }
     else
-        a = 100;
-    x1[0] = 1 - a / 50.0;
+    {
+        x1[0] = -1;
+        y1[0] = AverageValueConc / NUMBER_OF_POINTS;
+    }
     x1[1] = 1;
-    y1[0] = AverageValueConc / NUMBER_OF_POINTS;
     y1[1] = y1[0];
 
     // Display graphic
@@ -194,21 +194,16 @@ void MainWindow::on_buttonRefresh_clicked()
     ui->widget->yAxis->setRange(0, 100);
     ui->widget->replot();
 
-    QVector<double> x2(NUMBER_OF_POINTS), y2(NUMBER_OF_POINTS); // Points to concentrarion graphic
-    for (int i = 0; i < NUMBER_OF_POINTS; ++i)
-    {
-      x2[i] = XConcentration[i]; // We get our values from global array
-      y2[i] = YConcentration[(i + Period) % NUMBER_OF_POINTS];
-    }
-
     ui->widget->addGraph();
     ui->widget->graph(1)->setData(x2, y2);
 
+    AverageValueMed = 0;
     QVector<double> x3(NUMBER_OF_POINTS), y3(NUMBER_OF_POINTS); // Points to meditation graphic
     for (int i = 0; i < NUMBER_OF_POINTS; ++i)
     {
       x3[i] = XMeditation[i];
       y3[i] = YMeditation[(i + Period) % NUMBER_OF_POINTS];
+      AverageValueMed += y3[i];
     }
     ui->widget->addGraph();
     pen.setColor(QColor(210, 10, 10));
@@ -216,9 +211,17 @@ void MainWindow::on_buttonRefresh_clicked()
     ui->widget->graph(2)->setData(x3, y3);
 
     QVector<double> x4(2), y4(2); // Array for average meditation line
-    x4[0] = 1 - a/50.0;
+    if (NoPeriod == 0)
+    {
+        x4[0] = 1 - Period / 50.0;
+        y4[0] = AverageValueMed / Period;
+    }
+    else
+    {
+        x4[0] = -1;
+        y4[0] = AverageValueMed / NUMBER_OF_POINTS;
+    }
     x4[1] = 1;
-    y4[0] = AverageValueMed / NUMBER_OF_POINTS;
     y4[1] = y4[0];
 
     // Displaying graphic
