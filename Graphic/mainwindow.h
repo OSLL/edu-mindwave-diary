@@ -1,14 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QTime>
-#include <QTimer>
-#include <QString>
-#include <algorithm>
-#include <string>
-#include <iostream>
-#include <cmath>
+#include "libraries.h"
 
 #define NUMBER_OF_POINTS 101
 

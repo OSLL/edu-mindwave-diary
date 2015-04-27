@@ -19,7 +19,7 @@ SOURCES += main.cpp\
 HEADERS  += \
     mainwindow.h \
     qcustomplot.h \
-    Widget.h
+    libraries.h
 
 FORMS    += mainwindow.ui
 

@@ -246,12 +246,12 @@ void MainWindow::on_buttonRestart_clicked()
 void MainWindow::on_buttonAnswer_clicked()
 {
     double a = std::min(abs(AverageValueConc - first.AvConcSleep), abs(AverageValueConc - first.AvConcRun));
-    a = std::min(a, abs(AverageValueConc - first.AvConcRead));
-    a = std::min(a, abs(AverageValueConc - first.AvConcPlay));
+    a = std::min(a, (double)abs(AverageValueConc - first.AvConcRead));
+    a = std::min(a, (double)abs(AverageValueConc - first.AvConcPlay));
 
     double b = std::min(abs(AverageValueMed - first.AvMedSleep), abs(AverageValueMed - first.AvMedRun));
-    b = std::min(a, abs(AverageValueMed - first.AvMedRead));
-    b = std::min(a, abs(AverageValueMed - first.AvMedPlay));
+    b = std::min(b, (double)abs(AverageValueMed - first.AvMedRead));
+    b = std::min(b, (double)abs(AverageValueMed - first.AvMedPlay));
 
     if (a == abs(AverageValueConc - first.AvConcSleep))
         ui->label_9->setText("I think, you are sleeping");
