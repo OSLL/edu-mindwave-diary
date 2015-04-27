@@ -2,9 +2,9 @@
 #include <QApplication>
 
 // Extern variables from mainwindow.h
-double TestVariable = 0, AverageValueConc = 0, AverageValueMed = 0;
-double XMeditation[101], YMeditation[101];
-double XConcentration[101], YConcentration[101];
+double AverageValueConc = 0, AverageValueMed = 0;
+double XMeditation[NUMBER_OF_POINTS], YMeditation[NUMBER_OF_POINTS];
+double XConcentration[NUMBER_OF_POINTS], YConcentration[NUMBER_OF_POINTS];
 int Period = 0, NoPeriod = 0;
 PersonalData first;
 

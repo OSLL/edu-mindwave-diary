@@ -93,7 +93,7 @@ extern PersonalData first;
 extern int Period, NoPeriod; // Past period, number of current period
 extern double TestVariable; // Random value for graphic
 extern double AverageValueConc, AverageValueMed; // Current average values
-extern double XMeditation[101], YMeditation[101]; // Global array for points in graphic
-extern double XConcentration[101], YConcentration[101]; // Global array for points in graphic
+extern double XMeditation[NUMBER_OF_POINTS], YMeditation[NUMBER_OF_POINTS]; // Global array for points in graphic
+extern double XConcentration[NUMBER_OF_POINTS], YConcentration[NUMBER_OF_POINTS]; // Global array for points in graphic
 
 #endif // MAINWINDOW_H

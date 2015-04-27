@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "values.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,43 +31,47 @@ void MainWindow::on_buttonWrite_clicked()
 {
     // Refresh timer
     ui->label_3->setText(QTime::currentTime().toString()); // Show current time
-    ui->label->setText(QString::number((Period + 100*NoPeriod))); // Show number of data packets
+    ui->label->setText(QString::number((Period + 100 * NoPeriod))); // Show number of data packets
 
-    const QString str = QString::number(1 + sin(TestVariable)); // Imitation data packet
-    TestVariable += rand() % 100;
+    int currConcentration = getConcentrationValue();
+    int currMeditation = getMeditationValue();
+    currConcentration = getConcentrationValue();
+    currMeditation = getMeditationValue();
+
+    const QString str = QString::number(currConcentration); // Imitation data packet
     ui->textBrowser->setText(str);
-    YConcentration[Period] = 1 + sin(TestVariable);
-    YMeditation[Period] = 1 + cos(TestVariable);
+    YConcentration[Period] = currConcentration;
+    YMeditation[Period] = currMeditation;
 
     if (ui->radioButton->isChecked()) // Choose selected button to calculate new average value for chosen activity
     {
         first.NumSleep++;
-        first.AvConcSleep += 1 + sin(TestVariable);
-        first.AvMedSleep += 1 + cos(TestVariable);
+        first.AvConcSleep += currConcentration;
+        first.AvMedSleep += currMeditation;
         ui->label_4->setText("now you say that you're sleeping");
     }
 
     if (ui->radioButton_2->isChecked())
     {
         first.NumRun++;
-        first.AvConcRun += 1 + sin(TestVariable);
-        first.AvMedRun += 1 + cos(TestVariable);
+        first.AvConcRun += currConcentration;
+        first.AvMedRun += currMeditation;
         ui->label_4->setText("now you say that you're running");
     }
 
     if (ui->radioButton_3->isChecked())
     {
         first.NumRead++;
-        first.AvConcRead += 1 + sin(TestVariable);
-        first.AvMedRead += 1 + cos(TestVariable);
+        first.AvConcRead += currConcentration;
+        first.AvMedRead += currMeditation;
         ui->label_4->setText("now you say that you're reading");
     }
 
     if (ui->radioButton_4->isChecked())
     {
         first.NumPlay++;
-        first.AvConcPlay += 1 + sin(TestVariable);
-        first.AvMedPlay += 1 + cos(TestVariable);
+        first.AvConcPlay += currConcentration;
+        first.AvMedPlay += currMeditation;
         ui->label_4->setText("now you say that you're playing");
     }
 
@@ -77,7 +82,7 @@ void MainWindow::on_buttonWrite_clicked()
 
     if (Period >= 100) // Changing period
         NoPeriod++;
-    Period = (Period + 1) % 101;
+    Period = (Period + 1) % NUMBER_OF_POINTS;
 
     if (first.AvConcSleep != 0)
         ui->label_5->setText(QString::number(first.FracSleepConc()));
@@ -90,6 +95,7 @@ void MainWindow::on_buttonWrite_clicked()
 
     if (first.AvConcPlay != 0)
         ui->label_8->setText(QString::number(first.FracPlayConc()));
+
     if (first.AvMedSleep != 0)
         ui->label_14->setText(QString::number(first.FracSleepMed()));
 
@@ -103,8 +109,17 @@ void MainWindow::on_buttonWrite_clicked()
         ui->label_17->setText(QString::number(first.FracPlayMed()));
 
     MainWindow::on_buttonRefresh_clicked(); // Update graphic
-    AverageValueConc += 1 + sin(TestVariable); // Calculating of average value
-    AverageValueMed += 1 + cos(TestVariable); //
+
+    // Calculating of average values
+    if (NoPeriod > 0)
+    {
+        AverageValueConc += currConcentration - YConcentration[0];
+        AverageValueMed += currMeditation - YMeditation[0];
+    }
+    else
+    {
+
+    }
 
     ui->horizontalSlider->setRange(100, 1000);
     ui->labelPause->setText("");
@@ -155,16 +170,12 @@ void MainWindow::on_buttonRefresh_clicked()
     QVector <double> x1(2), y1(2); // Array for average concentration line
     int a; // Position to set average value in OX
     if (NoPeriod == 0)
-    {
        a = Period;
-    }
     else
-    {
         a = 100;
-    }
-    x1[0] = 1 - a/50.0;
+    x1[0] = 1 - a / 50.0;
     x1[1] = 1;
-    y1[0] = AverageValueConc / (Period + 100*NoPeriod);
+    y1[0] = AverageValueConc / NUMBER_OF_POINTS;
     y1[1] = y1[0];
 
     // Display graphic
@@ -180,24 +191,24 @@ void MainWindow::on_buttonRefresh_clicked()
     ui->widget->yAxis->setLabel("value");
     // Set axes ranges, so we see all data
     ui->widget->xAxis->setRange(-1, 1);
-    ui->widget->yAxis->setRange(0, 2);
+    ui->widget->yAxis->setRange(0, 100);
     ui->widget->replot();
 
     QVector<double> x2(NUMBER_OF_POINTS), y2(NUMBER_OF_POINTS); // Points to concentrarion graphic
-    for (int i = 0; i < 101; ++i)
+    for (int i = 0; i < NUMBER_OF_POINTS; ++i)
     {
       x2[i] = XConcentration[i]; // We get our values from global array
-      y2[i] = YConcentration[(i + Period) % 101];
+      y2[i] = YConcentration[(i + Period) % NUMBER_OF_POINTS];
     }
 
     ui->widget->addGraph();
     ui->widget->graph(1)->setData(x2, y2);
 
-    QVector<double> x3(101), y3(101); // Points to meditation graphic
-    for (int i = 0; i < 101; ++i)
+    QVector<double> x3(NUMBER_OF_POINTS), y3(NUMBER_OF_POINTS); // Points to meditation graphic
+    for (int i = 0; i < NUMBER_OF_POINTS; ++i)
     {
       x3[i] = XMeditation[i];
-      y3[i] = YMeditation[(i + Period) % 101];
+      y3[i] = YMeditation[(i + Period) % NUMBER_OF_POINTS];
     }
     ui->widget->addGraph();
     pen.setColor(QColor(210, 10, 10));
@@ -207,7 +218,7 @@ void MainWindow::on_buttonRefresh_clicked()
     QVector<double> x4(2), y4(2); // Array for average meditation line
     x4[0] = 1 - a/50.0;
     x4[1] = 1;
-    y4[0] = AverageValueMed/ (Period + 100*NoPeriod);
+    y4[0] = AverageValueMed / NUMBER_OF_POINTS;
     y4[1] = y4[0];
 
     // Displaying graphic
@@ -225,14 +236,10 @@ void MainWindow::on_buttonRestart_clicked()
     AverageValueMed = 0;
     NoPeriod = 0;
     Period = 0;
-    TestVariable = 0;
     for (int i = 0; i < NUMBER_OF_POINTS; ++i)
     {
       XConcentration[i] = i/50.0 - 1; // Let X be in range from -1 to 1
       YConcentration[i] = 0;
-    }
-    for (int i = 0; i < NUMBER_OF_POINTS; ++i)
-    {
       XMeditation[i] = i/50.0 - 1; //
       YMeditation[i] = 0;
     }
