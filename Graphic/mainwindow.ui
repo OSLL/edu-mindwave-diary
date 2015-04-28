@@ -112,18 +112,6 @@
       <string>PAUSE</string>
      </property>
     </widget>
-    <zorder>labelPause</zorder>
-    <zorder>label_9</zorder>
-   </widget>
-   <widget class="QTextBrowser" name="textBrowser">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>340</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
    </widget>
    <widget class="QPushButton" name="buttonWrite">
     <property name="geometry">
@@ -440,14 +428,14 @@
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>340</y>
-      <width>71</width>
+      <x>20</x>
+      <y>330</y>
+      <width>111</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>online value</string>
+     <string>Current Concentration:</string>
     </property>
    </widget>
    <widget class="Line" name="line_4">
@@ -565,6 +553,45 @@
     </property>
     <property name="text">
      <string>ConcPlay</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="LabelCurrConc">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>330</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CurrConc</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_18">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>350</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Current Meditation:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="LabelCurrMed">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>350</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CurrMed</string>
     </property>
    </widget>
   </widget>

@@ -36,8 +36,11 @@ void MainWindow::on_buttonWrite_clicked()
     int currConcentration = getConcentrationValue();
     int currMeditation = getMeditationValue();
 
-    const QString str = QString::number(currConcentration); // Imitation data packet
-    ui->textBrowser->setText(str);
+    const QString CurrConcValue = QString::number(currConcentration);
+    ui->LabelCurrConc->setText(CurrConcValue);
+    const QString CurrMedValue = QString::number(currMeditation);
+    ui->LabelCurrMed->setText(CurrMedValue);
+
     YConcentration[Period] = currConcentration;
     YMeditation[Period] = currMeditation;
 
@@ -181,9 +184,13 @@ void MainWindow::on_buttonRefresh_clicked()
     // Display graphic
     ui->widget->addGraph();
     ui->widget->graph(0)->setData(x1, y1);
+    ui->widget->addGraph();
+    ui->widget->graph(1)->setData(x2, y2);
 
     QPen pen;
-    pen.setColor(QColor(50, 50, 100));
+    pen.setColor(QColor(210, 10, 10));
+
+    ui->widget->graph(1)->setPen(pen);
     ui->widget->graph(0)->setPen(pen);
 
     // Here some operation to change graphic view
@@ -194,9 +201,6 @@ void MainWindow::on_buttonRefresh_clicked()
     ui->widget->yAxis->setRange(0, 100);
     ui->widget->replot();
 
-    ui->widget->addGraph();
-    ui->widget->graph(1)->setData(x2, y2);
-
     AverageValueMed = 0;
     QVector<double> x3(NUMBER_OF_POINTS), y3(NUMBER_OF_POINTS); // Points to meditation graphic
     for (int i = 0; i < NUMBER_OF_POINTS; ++i)
@@ -204,11 +208,7 @@ void MainWindow::on_buttonRefresh_clicked()
       x3[i] = XMeditation[i];
       y3[i] = YMeditation[(i + Period) % NUMBER_OF_POINTS];
       AverageValueMed += y3[i];
-    }
-    ui->widget->addGraph();
-    pen.setColor(QColor(210, 10, 10));
-    ui->widget->graph(2)->setPen(pen);
-    ui->widget->graph(2)->setData(x3, y3);
+    }    
 
     QVector<double> x4(2), y4(2); // Array for average meditation line
     if (NoPeriod == 0)
@@ -224,10 +224,16 @@ void MainWindow::on_buttonRefresh_clicked()
     x4[1] = 1;
     y4[1] = y4[0];
 
-    // Displaying graphic
+    // Display graphic
+    ui->widget->addGraph();
+    ui->widget->graph(2)->setData(x3, y3);
     ui->widget->addGraph();
     ui->widget->graph(3)->setData(x4, y4);
 
+    pen.setColor(QColor(10, 10, 210));
+
+    ui->widget->graph(2)->setPen(pen);
+    ui->widget->graph(3)->setPen(pen);
 
     ui->widget->replot();
 }
@@ -249,7 +255,9 @@ void MainWindow::on_buttonRestart_clicked()
     ui->label->setText("");
     ui->labelPause->setText("");
     ui->label_3->setText("");
-    ui->textBrowser->setText("");
+    ui->LabelCurrConc->setText("");
+    ui->LabelCurrMed->setText("");
+
     MainWindow::on_buttonRefresh_clicked(); // Refresh graphic
 }
 
