@@ -5,11 +5,11 @@
 double AverageValueConc = 0, AverageValueMed = 0;
 double XMeditation[NUMBER_OF_POINTS], YMeditation[NUMBER_OF_POINTS];
 double XConcentration[NUMBER_OF_POINTS], YConcentration[NUMBER_OF_POINTS];
-int Period = 0, NoPeriod = 0;
-PersonalData first;
+int Period = 0, NoPeriod = 0, selectedPerson = 0;
+QVector <PersonalData> person (4);
 
 int main(int argc, char *argv[])
-{
+{    
     for (int i = 0; i < NUMBER_OF_POINTS; ++i)
     {
       XConcentration[i] = i/50.0 - 1; // Let x be in range from -1 to 1

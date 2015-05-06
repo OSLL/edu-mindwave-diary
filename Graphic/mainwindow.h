@@ -89,7 +89,8 @@ struct PersonalData
     }
 };
 
-extern PersonalData first;
+extern int selectedPerson;
+extern QVector <PersonalData> person;
 extern int Period, NoPeriod; // Past period, number of current period
 extern double TestVariable; // Random value for graphic
 extern double AverageValueConc, AverageValueMed; // Current average values

@@ -155,8 +155,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>388</y>
+      <x>40</x>
+      <y>370</y>
       <width>90</width>
       <height>16</height>
      </rect>
@@ -194,7 +194,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>40</x>
       <y>388</y>
       <width>71</width>
       <height>16</height>
@@ -402,8 +402,8 @@
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>300</y>
+      <x>130</x>
+      <y>290</y>
       <width>161</width>
       <height>21</height>
      </rect>
@@ -415,8 +415,8 @@
    <widget class="QPushButton" name="buttonAnswer">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>300</y>
+      <x>10</x>
+      <y>290</y>
       <width>111</width>
       <height>23</height>
      </rect>
@@ -428,8 +428,8 @@
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>330</y>
+      <x>10</x>
+      <y>320</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -454,7 +454,7 @@
    <widget class="QLabel" name="label_11">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>10</x>
       <y>390</y>
       <width>31</width>
       <height>13</height>
@@ -467,8 +467,8 @@
    <widget class="QLabel" name="label_12">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>390</y>
+      <x>10</x>
+      <y>372</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -558,8 +558,8 @@
    <widget class="QLabel" name="LabelCurrConc">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>330</y>
+      <x>130</x>
+      <y>320</y>
       <width>51</width>
       <height>21</height>
      </rect>
@@ -571,8 +571,8 @@
    <widget class="QLabel" name="label_18">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>350</y>
+      <x>10</x>
+      <y>340</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -584,8 +584,8 @@
    <widget class="QLabel" name="LabelCurrMed">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>350</y>
+      <x>130</x>
+      <y>340</y>
       <width>51</width>
       <height>21</height>
      </rect>
@@ -601,7 +601,7 @@
      <x>0</x>
      <y>0</y>
      <width>599</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPredictator">

@@ -46,33 +46,33 @@ void MainWindow::on_buttonWrite_clicked()
 
     if (ui->radioButton->isChecked()) // Choose selected button to calculate new average value for chosen activity
     {
-        first.NumSleep++;
-        first.AvConcSleep += currConcentration;
-        first.AvMedSleep += currMeditation;
+        person[selectedPerson].NumSleep++;
+        person[selectedPerson].AvConcSleep += currConcentration;
+        person[selectedPerson].AvMedSleep += currMeditation;
         ui->label_4->setText("now you say that you're sleeping");
     }
 
     if (ui->radioButton_2->isChecked())
     {
-        first.NumRun++;
-        first.AvConcRun += currConcentration;
-        first.AvMedRun += currMeditation;
+        person[selectedPerson].NumRun++;
+        person[selectedPerson].AvConcRun += currConcentration;
+        person[selectedPerson].AvMedRun += currMeditation;
         ui->label_4->setText("now you say that you're running");
     }
 
     if (ui->radioButton_3->isChecked())
     {
-        first.NumRead++;
-        first.AvConcRead += currConcentration;
-        first.AvMedRead += currMeditation;
+        person[selectedPerson].NumRead++;
+        person[selectedPerson].AvConcRead += currConcentration;
+        person[selectedPerson].AvMedRead += currMeditation;
         ui->label_4->setText("now you say that you're reading");
     }
 
     if (ui->radioButton_4->isChecked())
     {
-        first.NumPlay++;
-        first.AvConcPlay += currConcentration;
-        first.AvMedPlay += currMeditation;
+        person[selectedPerson].NumPlay++;
+        person[selectedPerson].AvConcPlay += currConcentration;
+        person[selectedPerson].AvMedPlay += currMeditation;
         ui->label_4->setText("now you say that you're playing");
     }
 
@@ -85,29 +85,29 @@ void MainWindow::on_buttonWrite_clicked()
         NoPeriod++;
     Period = (Period + 1) % NUMBER_OF_POINTS;
 
-    if (first.AvConcSleep != 0)
-        ui->label_5->setText(QString::number(first.FracSleepConc()));
+    if (person[selectedPerson].AvConcSleep != 0)
+        ui->label_5->setText(QString::number(person[selectedPerson].FracSleepConc()));
 
-    if (first.AvConcRun != 0)
-        ui->label_6->setText(QString::number(first.FracRunConc()));
+    if (person[selectedPerson].AvConcRun != 0)
+        ui->label_6->setText(QString::number(person[selectedPerson].FracRunConc()));
 
-    if (first.AvConcRead != 0)
-        ui->label_7->setText(QString::number(first.FracReadConc()));
+    if (person[selectedPerson].AvConcRead != 0)
+        ui->label_7->setText(QString::number(person[selectedPerson].FracReadConc()));
 
-    if (first.AvConcPlay != 0)
-        ui->label_8->setText(QString::number(first.FracPlayConc()));
+    if (person[selectedPerson].AvConcPlay != 0)
+        ui->label_8->setText(QString::number(person[selectedPerson].FracPlayConc()));
 
-    if (first.AvMedSleep != 0)
-        ui->label_14->setText(QString::number(first.FracSleepMed()));
+    if (person[selectedPerson].AvMedSleep != 0)
+        ui->label_14->setText(QString::number(person[selectedPerson].FracSleepMed()));
 
-    if (first.AvMedRun != 0)
-        ui->label_15->setText(QString::number(first.FracRunMed()));
+    if (person[selectedPerson].AvMedRun != 0)
+        ui->label_15->setText(QString::number(person[selectedPerson].FracRunMed()));
 
-    if (first.AvMedRead != 0)
-        ui->label_16->setText(QString::number(first.FracReadMed()));
+    if (person[selectedPerson].AvMedRead != 0)
+        ui->label_16->setText(QString::number(person[selectedPerson].FracReadMed()));
 
-    if (first.AvMedPlay != 0)
-        ui->label_17->setText(QString::number(first.FracPlayMed()));
+    if (person[selectedPerson].AvMedPlay != 0)
+        ui->label_17->setText(QString::number(person[selectedPerson].FracPlayMed()));
 
     MainWindow::on_buttonRefresh_clicked(); // Update graphic
 
@@ -263,24 +263,26 @@ void MainWindow::on_buttonRestart_clicked()
 
 void MainWindow::on_buttonAnswer_clicked()
 {
-    double a = std::min(abs(AverageValueConc - first.AvConcSleep), abs(AverageValueConc - first.AvConcRun));
-    a = std::min(a, (double)abs(AverageValueConc - first.AvConcRead));
-    a = std::min(a, (double)abs(AverageValueConc - first.AvConcPlay));
+    double a = std::min(abs(AverageValueConc - person[selectedPerson].AvConcSleep),
+                        abs(AverageValueConc - person[selectedPerson].AvConcRun));
+    a = std::min(a, (double)abs(AverageValueConc - person[selectedPerson].AvConcRead));
+    a = std::min(a, (double)abs(AverageValueConc - person[selectedPerson].AvConcPlay));
 
-    double b = std::min(abs(AverageValueMed - first.AvMedSleep), abs(AverageValueMed - first.AvMedRun));
-    b = std::min(b, (double)abs(AverageValueMed - first.AvMedRead));
-    b = std::min(b, (double)abs(AverageValueMed - first.AvMedPlay));
+    double b = std::min(abs(AverageValueMed - person[selectedPerson].AvMedSleep),
+                        abs(AverageValueMed - person[selectedPerson].AvMedRun));
+    b = std::min(b, (double)abs(AverageValueMed - person[selectedPerson].AvMedRead));
+    b = std::min(b, (double)abs(AverageValueMed - person[selectedPerson].AvMedPlay));
 
-    if (a == abs(AverageValueConc - first.AvConcSleep))
+    if (a == abs(AverageValueConc - person[selectedPerson].AvConcSleep))
         ui->label_9->setText("I think, you are sleeping");
 
-    if (a == abs(AverageValueConc - first.AvConcRun))
+    if (a == abs(AverageValueConc - person[selectedPerson].AvConcRun))
         ui->label_9->setText("I think, you are running");
 
-    if (a == abs(AverageValueConc - first.AvConcRead))
+    if (a == abs(AverageValueConc - person[selectedPerson].AvConcRead))
         ui->label_9->setText("I think, you are reading");
 
-    if (a == abs(AverageValueConc - first.AvConcPlay))
+    if (a == abs(AverageValueConc - person[selectedPerson].AvConcPlay))
         ui->label_9->setText("I think, you are playing");
 
 }

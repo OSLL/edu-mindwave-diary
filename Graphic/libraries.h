@@ -12,5 +12,6 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <QVector>
 
 #endif // LIBRARIES_H
