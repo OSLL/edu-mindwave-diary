@@ -19,9 +19,9 @@ wait() {
  * Program which prints ThinkGear Raw Wave Values to stdout.
  */
 int
-main( void ) {
+start_gear_main_main( void ) {
     
-    char *comPortName  = NULL;
+    const char *comPortName  = NULL;
     int   dllVersion   = 0;
     int   connectionId = 0;
     int   packetsRead  = 0;
