@@ -13,5 +13,6 @@
 #include <iostream>
 #include <cmath>
 #include <QVector>
+#include <QFile>
 
 #endif // LIBRARIES_H

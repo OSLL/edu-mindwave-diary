@@ -151,6 +151,23 @@ void MainWindow::on_buttonStop_clicked()
 
 void MainWindow::on_buttonExit_clicked()
 {
+    char str [1024];
+    for (int i = 0; i < 4; ++i)
+    {
+        dataFile.write(str, person[i].NumSleep);
+        dataFile.write(str, person[i].NumRun);
+        dataFile.write(str, person[i].NumRead);
+        dataFile.write(str, person[i].NumPlay);
+        dataFile.write(str, person[i].AvConcSleep);
+        dataFile.write(str, person[i].AvConcRun);
+        dataFile.write(str, person[i].AvConcRead);
+        dataFile.write(str, person[i].AvConcPlay);
+        dataFile.write(str, person[i].AvMedSleep);
+        dataFile.write(str, person[i].AvMedRun);
+        dataFile.write(str, person[i].AvMedRead);
+        dataFile.write(str, person[i].AvMedPlay);
+    }
+
     close();
 }
 
