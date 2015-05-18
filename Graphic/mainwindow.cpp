@@ -303,3 +303,27 @@ void MainWindow::on_buttonAnswer_clicked()
         ui->label_9->setText("I think, you are playing");
 
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    ui->label_20->setText("1");
+    selectedPerson = 0;
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->label_20->setText("2");
+    selectedPerson = 1;
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+  ui->label_20->setText("3");
+  selectedPerson = 2;
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+  ui->label_20->setText("4");
+  selectedPerson = 3;
+}
