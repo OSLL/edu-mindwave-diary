@@ -1,7 +1,7 @@
 #include "values.h"
 
-int Meditation = rand() % 100;
-int Concentration = rand() % 100;
+int Meditation = rand() % 100 - 20;
+int Concentration = rand() % 100 - 20;
 
 int getMeditationValue()
 {
